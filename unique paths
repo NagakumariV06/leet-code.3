@@ -1,0 +1,17 @@
+class Solution {
+public:
+    int uniquePaths(int m, int n) {
+        // Use a 1D DP array to save space; initialized to 1 for the first row
+        vector<int> dp(n, 1);
+
+        // Iterate through rows (starting from the second row)
+        for (int i = 1; i < m; i++) {
+            for (int j = 1; j < n; j++) {
+                // The ways to reach current cell = ways from above (dp[j]) + ways from left (dp[j-1])
+                dp[j] += dp[j - 1];
+            }
+        }
+
+        return dp[n - 1];
+    }
+};
