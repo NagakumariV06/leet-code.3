@@ -1,0 +1,41 @@
+#include <iostream>
+#include <vector>
+#include <string>
+#include <sstream>
+#include <deque>
+
+using namespace std;
+
+class Solution {
+public:
+    string simplifyPath(string path) {
+        deque<string> dq;
+        stringstream ss(path);
+        string segment;
+
+        // Split by '/' and process each segment
+        while (getline(ss, segment, '/')) {
+            if (segment == "" || segment == ".") {
+                continue;
+            }
+            if (segment == "..") {
+                if (!dq.empty()) {
+                    dq.pop_back(); // Go up one level
+                }
+            } else {
+                dq.push_back(segment); // Valid directory name
+            }
+        }
+
+        // Build the resulting path
+        if (dq.empty()) return "/";
+
+        string result = "";
+        while (!dq.empty()) {
+            result += "/" + dq.front();
+            dq.pop_front();
+        }
+
+        return result;
+    }
+};
