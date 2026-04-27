@@ -1,0 +1,43 @@
+#include <string>
+#include <vector>
+
+using namespace std;
+
+class Solution {
+public:
+    string getPermutation(int n, int k) {
+        vector<int> numbers;
+        int factorial = 1;
+        
+        // Calculate (n-1)! and populate the list of numbers [1, 2, ..., n]
+        for (int i = 1; i < n; ++i) {
+            factorial *= i;
+            numbers.push_back(i);
+        }
+        numbers.push_back(n); // numbers array now has [1, 2, ..., n]
+        
+        // Convert k to 0-based index
+        k--; 
+        
+        string result = "";
+        
+        // Find each digit one by one
+        for (int i = n; i >= 1; --i) {
+            int index = k / factorial;
+            
+            // Append the selected digit to the result
+            result += to_string(numbers[index]);
+            
+            // Remove the used digit from the list
+            numbers.erase(numbers.begin() + index);
+            
+            // Update k and the factorial for the next iteration
+            if (i > 1) {
+                k %= factorial;
+                factorial /= (i - 1);
+            }
+        }
+        
+        return result;
+    }
+};
