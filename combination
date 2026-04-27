@@ -1,0 +1,30 @@
+#include <vector>
+
+using namespace std;
+
+class Solution {
+public:
+    vector<vector<int>> combine(int n, int k) {
+        vector<vector<int>> result;
+        vector<int> current;
+        backtrack(1, n, k, current, result);
+        return result;
+    }
+
+private:
+    void backtrack(int start, int n, int k, vector<int>& current, vector<vector<int>>& result) {
+        // Base case: combination is the right size
+        if (current.size() == k) {
+            result.push_back(current);
+            return;
+        }
+
+        // Optimization: i <= n - (k - current.size()) + 1 
+        // This ensures we don't start a path if there aren't enough numbers left
+        for (int i = start; i <= n - (k - current.size()) + 1; ++i) {
+            current.push_back(i);        // Choose
+            backtrack(i + 1, n, k, current, result); // Explore
+            current.pop_back();          // Un-choose (backtrack)
+        }
+    }
+};
