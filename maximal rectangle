@@ -1,0 +1,50 @@
+#include <vector>
+#include <stack>
+#include <algorithm>
+
+class Solution {
+public:
+    // Helper function from Problem 84
+    int largestRectangleArea(std::vector<int>& heights) {
+        std::stack<int> st;
+        int maxArea = 0;
+        int n = heights.size();
+
+        for (int i = 0; i <= n; i++) {
+            int currentHeight = (i == n) ? 0 : heights[i];
+            while (!st.empty() && currentHeight < heights[st.top()]) {
+                int h = heights[st.top()];
+                st.pop();
+                int w = st.empty() ? i : i - st.top() - 1;
+                maxArea = std::max(maxArea, h * w);
+            }
+            st.push(i);
+        }
+        return maxArea;
+    }
+
+    int maximalRectangle(std::vector<std::vector<char>>& matrix) {
+        if (matrix.empty()) return 0;
+        
+        int rows = matrix.size();
+        int cols = matrix[0].size();
+        std::vector<int> heights(cols, 0);
+        int maxRect = 0;
+
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                // If matrix[i][j] is '1', add to current column height
+                // If '0', reset height to 0
+                if (matrix[i][j] == '1') {
+                    heights[j] += 1;
+                } else {
+                    heights[j] = 0;
+                }
+            }
+            // After processing each row, find the max area in the histogram
+            maxRect = std::max(maxRect, largestRectangleArea(heights));
+        }
+
+        return maxRect;
+    }
+};
